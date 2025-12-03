@@ -1,5 +1,7 @@
 import React from 'react'
-import { Routes, Route } from 'react-router-dom'
+import { Routes, Route, useLocation } from 'react-router-dom'
+import { AnimatePresence } from 'framer-motion'
+import PageTransition from './components/PageTransition'
 import Home from './pages/Home'
 import Collection from './pages/Collection'
 import About from './pages/About'
@@ -18,6 +20,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import Verify from './pages/Verify'
 
 const App = () => {
+  const location = useLocation();
   return (
     <div>
       <ToastContainer />
@@ -25,20 +28,22 @@ const App = () => {
       <div className='px-4 sm:px-[5vw] md:px-[7vw] lg:px-[9vw]'>
         <Navbar />
         <SearchBar />
-        <Routes>
-        <Route path='/' element={<Home />} />
-        <Route path='/collection' element={<Collection />} />
-        <Route path='/about' element={<About />} />
-        <Route path='/contact' element={<Contact />} />
-        <Route path='/product/:productId' element={<Product />} />
-        <Route path='/cart' element={<Cart />} />
-        <Route path='/login' element={<Login />} />
-        <Route path='/place-order' element={<PlaceOrder />} />
-        <Route path='/orders' element={<Orders />} />
-        <Route path='/verify' element={<Verify />} />
-        </Routes>
-        <Footer />
+        <AnimatePresence mode='wait'>
+          <Routes location={location} key={location.pathname}>
+            <Route path='/' element={<PageTransition><Home /></PageTransition>} />
+            <Route path='/collection' element={<PageTransition><Collection /></PageTransition>} />
+            <Route path='/about' element={<PageTransition><About /></PageTransition>} />
+            <Route path='/contact' element={<PageTransition><Contact /></PageTransition>} />
+            <Route path='/product/:productId' element={<PageTransition><Product /></PageTransition>} />
+            <Route path='/cart' element={<PageTransition><Cart /></PageTransition>} />
+            <Route path='/login' element={<PageTransition><Login /></PageTransition>} />
+            <Route path='/place-order' element={<PageTransition><PlaceOrder /></PageTransition>} />
+            <Route path='/orders' element={<PageTransition><Orders /></PageTransition>} />
+            <Route path='/verify' element={<PageTransition><Verify /></PageTransition>} />
+          </Routes>
+        </AnimatePresence>
       </div>
+      <Footer />
     </div>
   )
 }

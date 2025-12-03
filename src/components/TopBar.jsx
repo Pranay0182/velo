@@ -27,32 +27,30 @@ const TopBar = () => {
   }, [paused]);
 
   const variants = {
-    initial: { y: -18, opacity: 0, filter: "blur(4px)", scale: 0.98 },
+    initial: { y: 10, opacity: 0, filter: "blur(2px)" },
     animate: {
       y: 0,
       opacity: 1,
       filter: "blur(0px)",
-      scale: 1,
       transition: {
-        duration: 0.55,
-        ease: [0.22, 0.8, 0.26, 0.9],
+        duration: 0.6,
+        ease: "easeOut",
       },
     },
     exit: {
-      y: 18,
+      y: -10,
       opacity: 0,
-      filter: "blur(4px)",
-      scale: 0.98,
+      filter: "blur(2px)",
       transition: {
-        duration: 0.45,
-        ease: [0.4, 0.0, 0.2, 1],
+        duration: 0.4,
+        ease: "easeIn",
       },
     },
   };
 
   return (
-    <div className="w-full bg-[#052A6A] text-white text-sm shadow-sm">
-      <div className="relative w-full h-10 md:h-12 overflow-hidden">
+    <div className="w-full bg-black text-white text-sm shadow-sm relative z-50">
+      <div className="relative w-full h-10 md:h-11 overflow-hidden flex items-center justify-center">
         <div
           className="absolute inset-0 flex items-center justify-center pointer-events-auto"
           onMouseEnter={() => setPaused(true)}
@@ -65,14 +63,15 @@ const TopBar = () => {
               initial="initial"
               animate="animate"
               exit="exit"
-              className="whitespace-nowrap text-xs sm:text-sm md:text-base lg:text-lg text-center px-6 font-medium tracking-wide drop-shadow-[0_1px_1px_rgba(0,0,0,0.4)]"
+              className="whitespace-nowrap text-[10px] sm:text-xs md:text-sm uppercase tracking-[0.2em] font-semibold text-center px-4 text-gray-200"
             >
               {messages[index]}
             </motion.span>
           </AnimatePresence>
         </div>
 
-        <div className="pointer-events-none absolute inset-x-0 bottom-0 h-[1px] bg-gradient-to-r from-transparent via-white/40 to-transparent opacity-70" />
+        {/* Stylish bottom gradient line */}
+        <div className="pointer-events-none absolute inset-x-0 bottom-0 h-[1px] bg-gradient-to-r from-transparent via-gray-500 to-transparent opacity-30" />
       </div>
     </div>
   );
