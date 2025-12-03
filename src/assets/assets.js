@@ -69,7 +69,7 @@ import star_icon from './star_icon.png'
 import support_img from './support_img.png'
 import menu_icon from './menu_icon.png'
 import about_img from './about_img.png'
-import contact_img from './contact_img.png'
+import contact_img from './contact_img.jpg'
 import razorpay_logo from './razorpay_logo.png'
 import stripe_logo from './stripe_logo.png'
 import cross_icon from './cross_icon.png'
@@ -763,6 +763,45 @@ export const heroSlides = [
         "Resistors, capacitors, sensors, displays, relay modules and power supplies for any electronics project.",
       ctaText: "Shop Components",
       ctaLink: "/category/components",
+    }];
+    export const shopGridCards = [
+    {
+      id: "raspberry",
+      type: "large",
+      title: "Power Your Projects with Raspberry Pi",
+      subtitle:
+        "Experience next-level performance. Shop the latest boards, complete kits, and essential accessories.",
+      image: hero_img, // big banner image
+    },
+    {
+      id: "drones",
+      type: "small",
+      title: "Drones",
+      subtitle: "from ₹1599*",
+      image: p_img1,  // choose suitable image
+    },
+    {
+      id: "printers",
+      type: "small",
+      title: "3D Printers",
+      subtitle: "from ₹299*",
+      image: p_img2_1,
+    },
+    {
+      id: "wireless",
+      type: "small",
+      title: "Wireless Boards",
+      subtitle: "from ₹349*",
+      image: p_img3,
+    },
+    {
+      id: "sensors",
+      type: "small",
+      title: "Sensors",
+      subtitle: "from ₹199*",
+      image: p_img4,
     },
   ];
+  
+  
   
