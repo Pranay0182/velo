@@ -73,6 +73,7 @@ import contact_img from './contact_img.jpg'
 import razorpay_logo from './razorpay_logo.png'
 import stripe_logo from './stripe_logo.png'
 import cross_icon from './cross_icon.png'
+import banner_02 from './banner_02.jpg'
 
 export const assets = {
     logo,
@@ -736,7 +737,7 @@ export const heroSlides = [
     },
     {
       id: "hero-robotics",
-      image: hero_img, // temp image, swap with a robotics/motor banner
+      image: banner_02, // temp image, swap with a robotics/motor banner
       badge: "Robotics · Motors · Drivers",
       title: "Build Your Own Robots from Scratch",
       subtitle:

@@ -4,7 +4,7 @@ import { Link, NavLink } from 'react-router-dom'
 import { ShopContext } from '../context/ShopContext';
 
 const categories = [
-  { label: 'DIY Kits',                  to: '/collection/diy-kits' },
+  { label: 'DIY Kits',                 to: '/collection/diy-kits' },
   { label: 'AI Hardware',              to: '/collection/ai-hardware' },
   { label: 'Raspberry Pi',             to: '/collection/raspberry-pi' },
   { label: 'Arduino',                  to: '/collection/arduino' },
