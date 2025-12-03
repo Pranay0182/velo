@@ -7,7 +7,15 @@ export const ShopContext = createContext();
 
 const ShopContextProvider = (props) => {
 
-    const currency = '$';
+    const currency = '₹';
+    const formatterINR = new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR', maximumFractionDigits: 0 });
+    const formatCurrency = (value) => {
+        if (value === null || value === undefined) return '';
+        // if value is not a number try to coerce
+        const num = Number(value);
+        if (isNaN(num)) return String(value);
+        return formatterINR.format(num);
+    }
     const delivery_fee = 10;
     const backendUrl = import.meta.env.VITE_BACKEND_URL
     const [search, setSearch] = useState('');
@@ -152,7 +160,7 @@ const ShopContextProvider = (props) => {
     }, [token])
 
     const value = {
-        products, currency, delivery_fee,
+        products, currency, delivery_fee, formatCurrency,
         search, setSearch, showSearch, setShowSearch,
         cartItems, addToCart,setCartItems,
         getCartCount, updateQuantity,

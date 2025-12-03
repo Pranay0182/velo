@@ -1,4 +1,4 @@
-import React from 'react'
+import React from "react";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { heroSlides } from "../assets/assets";
@@ -19,7 +19,6 @@ const HeroCarousel = () => {
     setCurrent((prev) => (prev - 1 + total) % total);
   };
 
-  // Auto-play
   useEffect(() => {
     const interval = setInterval(nextSlide, 6000);
     return () => clearInterval(interval);
@@ -28,18 +27,16 @@ const HeroCarousel = () => {
   const active = slides[current];
 
   return (
-    <section className="w-full">
-      <div className="relative w-full h-[60vh] md:h-[80vh] overflow-hidden rounded-2xl bg-gray-900">
-        {/* Background image */}
+    <section className="w-screen relative left-1/2 right-1/2 -ml-[50vw] -mr-[50vw]">
+      <div className="relative w-full h-[50vh] md:h-[65vh] overflow-hidden bg-gray-900">
+
         <div
           className="absolute inset-0 bg-center bg-cover transition-opacity duration-700 ease-in-out"
           style={{ backgroundImage: `url(${active.image})` }}
         />
 
-        {/* Dark overlay */}
         <div className="absolute inset-0 bg-black/45" />
 
-        {/* Content */}
         <div className="relative z-10 flex h-full items-center px-6 md:px-16">
           <div className="max-w-xl text-white space-y-4">
             {active.badge && (
@@ -79,23 +76,8 @@ const HeroCarousel = () => {
           </div>
         </div>
 
-        {/* Prev / Next arrows */}
-        <button
-          type="button"
-          onClick={prevSlide}
-          className="absolute left-3 top-1/2 -translate-y-1/2 rounded-full bg-black/40 backdrop-blur px-3 py-2 text-white text-lg hover:bg-black/60"
-        >
-          ‹
-        </button>
-        <button
-          type="button"
-          onClick={nextSlide}
-          className="absolute right-3 top-1/2 -translate-y-1/2 rounded-full bg-black/40 backdrop-blur px-3 py-2 text-white text-lg hover:bg-black/60"
-        >
-          ›
-        </button>
+        
 
-        {/* Dots */}
         <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-2">
           {slides.map((slide, index) => (
             <button
