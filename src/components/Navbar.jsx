@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react'
+import React, { useContext, useState, useEffect, useRef } from 'react'
 import { assets } from '../assets/assets'
 import { Link, NavLink } from 'react-router-dom'
 import { ShopContext } from '../context/ShopContext';
@@ -29,8 +29,23 @@ const Navbar = () => {
   // NEW: dropdown states (only for COLLECTION)
   const [isCollectionOpen, setIsCollectionOpen] = useState(false);
   const [isMobileCollectionOpen, setIsMobileCollectionOpen] = useState(false);
+  const collectionRef = useRef(null);
 
   const {setShowSearch , getCartCount , navigate, token, setToken, setCartItems} = useContext(ShopContext);
+
+  // Close dropdown when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (collectionRef.current && !collectionRef.current.contains(event.target)) {
+        setIsCollectionOpen(false);
+      }
+    };
+
+    if (isCollectionOpen) {
+      document.addEventListener('mousedown', handleClickOutside);
+      return () => document.removeEventListener('mousedown', handleClickOutside);
+    }
+  }, [isCollectionOpen]);
 
   const logout = () => {
       navigate('/login')
@@ -45,46 +60,46 @@ const Navbar = () => {
       <Link to='/'><img src={assets.logo} className='w-56' alt="" /></Link>
 
       {/* DESKTOP NAV */}
-      <ul className='hidden sm:flex gap-5 text-sm text-gray-700'>
+      <ul className='hidden sm:flex gap-6 text-base sm:text-lg font-medium text-gray-700'>
         
         <NavLink to='/' className='flex flex-col items-center gap-1'>
             <p>HOME</p>
             <hr className='w-2/4 border-none h-[1.5px] bg-gray-700 hidden' />
         </NavLink>
 
-        {/* CHANGED: COLLECTION WITH DROPDOWN */}
-        <div className="relative">
+        {/* CHANGED: CATEGORIES WITH DROPDOWN */}
+        <div className="relative" ref={collectionRef}>
           <button
             type="button"
             onClick={() => setIsCollectionOpen(prev => !prev)}
             className="flex flex-col items-center gap-1"
           >
-            <p>COLLECTION</p>
+            <p>CATEGORIES</p>
             <hr className='w-2/4 border-none h-[1.5px] bg-gray-700 hidden' />
           </button>
 
-          {isCollectionOpen && (
-            <div className="absolute left-1/2 -translate-x-1/2 mt-3 w-64 bg-white border rounded-md shadow-lg z-50 max-h-96 overflow-y-auto">
-              <ul className="py-2 text-sm text-gray-700">
-                {categories.map(cat => (
-                  <NavLink
-                    key={cat.to}
-                    to={cat.to}
-                    className={({ isActive }) =>
-                      `block px-4 py-2 hover:bg-gray-100 ${
-                        isActive ? 'font-semibold text-black' : ''
-                      }`
-                    }
-                    onClick={() => setIsCollectionOpen(false)}
-                  >
-                    {cat.label}
-                  </NavLink>
-                ))}
-              </ul>
-            </div>
-          )}
+          <div className={`absolute left-1/2 -translate-x-1/2 mt-3 w-64 bg-white border rounded-md shadow-lg z-50 max-h-96 overflow-y-auto transition-all duration-300 origin-top ${
+            isCollectionOpen ? 'opacity-100 scale-y-100 pointer-events-auto' : 'opacity-0 scale-y-95 pointer-events-none'
+          }`}>
+            <ul className="py-2 text-sm text-gray-700">
+              {categories.map(cat => (
+                <NavLink
+                  key={cat.to}
+                  to={cat.to}
+                  className={({ isActive }) =>
+                    `block px-4 py-2 hover:bg-gray-100 transition-colors ${
+                      isActive ? 'font-semibold text-black' : ''
+                    }`
+                  }
+                  onClick={() => setIsCollectionOpen(false)}
+                >
+                  {cat.label}
+                </NavLink>
+              ))}
+            </ul>
+          </div>
         </div>
-        {/* END COLLECTION CHANGE */}
+        {/* END CATEGORIES CHANGE */}
 
         <NavLink to='/about' className='flex flex-col items-center gap-1'>
             <p>ABOUT</p>
@@ -151,14 +166,14 @@ const Navbar = () => {
             HOME
           </NavLink>
 
-          {/* CHANGED: MOBILE COLLECTION WITH DROPDOWN */}
+          {/* CHANGED: MOBILE CATEGORIES WITH DROPDOWN */}
           <div className="border">
             <button
               type="button"
               onClick={() => setIsMobileCollectionOpen(prev => !prev)}
               className="w-full flex items-center justify-between py-2 pl-6 pr-4"
             >
-              <span>COLLECTION</span>
+              <span>CATEGORIES</span>
               <img
                 src={assets.dropdown_icon}
                 className={`h-3 transition-transform ${isMobileCollectionOpen ? 'rotate-180' : ''}`}
@@ -184,7 +199,7 @@ const Navbar = () => {
               </div>
             )}
           </div>
-          {/* END MOBILE COLLECTION CHANGE */}
+          {/* END MOBILE CATEGORIES CHANGE */}
 
           <NavLink onClick={()=>setVisible(false)} className='py-2 pl-6 border' to='/about'>
             ABOUT
