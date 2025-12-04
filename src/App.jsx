@@ -26,9 +26,13 @@ const App = () => {
     <div>
       <ToastContainer />
       <TopBar />
-      <div className='px-4 sm:px-[5vw] md:px-[7vw] lg:px-[9vw]'>
-        <Navbar />
+      <div className='sticky top-0 z-50 bg-white'>
+        <div className='px-4 sm:px-[5vw] md:px-[7vw] lg:px-[9vw]'>
+          <Navbar />
+        </div>
         <SearchBar />
+      </div>
+      <div className='px-4 sm:px-[5vw] md:px-[7vw] lg:px-[9vw]'>
         <AnimatePresence mode='wait'>
           <Routes location={location} key={location.pathname}>
             <Route path='/' element={<PageTransition><Home /></PageTransition>} />

@@ -75,33 +75,39 @@ const Navbar = () => {
         </NavLink>
 
         {/* CHANGED: CATEGORIES WITH DROPDOWN */}
-        <div className="relative" ref={collectionRef}>
+        <div
+          className="relative"
+          ref={collectionRef}
+          onMouseEnter={() => setIsCollectionOpen(true)}
+          onMouseLeave={() => setIsCollectionOpen(false)}
+        >
           <button
             type="button"
-            onClick={() => setIsCollectionOpen(prev => !prev)}
             className="flex flex-col items-center gap-1"
           >
             <p>CATEGORIES</p>
             <hr className='w-2/4 border-none h-[1.5px] bg-gray-700 hidden' />
           </button>
 
-          <div className={`absolute left-1/2 -translate-x-1/2 mt-3 w-64 bg-white border rounded-md shadow-lg z-50 max-h-96 overflow-y-auto transition-all duration-300 origin-top ${isCollectionOpen ? 'opacity-100 scale-y-100 pointer-events-auto' : 'opacity-0 scale-y-95 pointer-events-none'
+          <div className={`absolute left-1/2 -translate-x-1/2 pt-4 w-64 z-50 transition-all duration-300 origin-top ${isCollectionOpen ? 'opacity-100 scale-y-100 pointer-events-auto' : 'opacity-0 scale-y-95 pointer-events-none'
             }`}>
-            <ul className="py-2 text-sm text-gray-700">
-              {categories.map(cat => (
-                <NavLink
-                  key={cat.to}
-                  to={cat.to}
-                  className={({ isActive }) =>
-                    `block px-4 py-2 hover:bg-gray-100 transition-colors ${isActive ? 'font-semibold text-black' : ''
-                    }`
-                  }
-                  onClick={() => setIsCollectionOpen(false)}
-                >
-                  {cat.label}
-                </NavLink>
-              ))}
-            </ul>
+            <div className="bg-white border rounded-md shadow-lg max-h-96 overflow-y-auto">
+              <ul className="py-2 text-sm text-gray-700">
+                {categories.map(cat => (
+                  <NavLink
+                    key={cat.to}
+                    to={cat.to}
+                    className={({ isActive }) =>
+                      `block px-4 py-2 hover:bg-gray-100 transition-colors ${isActive ? 'font-semibold text-black' : ''
+                      }`
+                    }
+                    onClick={() => setIsCollectionOpen(false)}
+                  >
+                    {cat.label}
+                  </NavLink>
+                ))}
+              </ul>
+            </div>
           </div>
         </div>
         {/* END CATEGORIES CHANGE */}
@@ -172,7 +178,7 @@ const Navbar = () => {
       </div>
 
       {/* MOBILE SIDEBAR */}
-      <div className={`absolute top-0 right-0 bottom-0 overflow-hidden bg-white transition-all ${visible ? 'w-full' : 'w-0'}`}>
+      <div className={`fixed top-0 right-0 bottom-0 overflow-hidden bg-white transition-all z-[100] ${visible ? 'w-full' : 'w-0'}`}>
         <div className='flex flex-col text-gray-600'>
           <div onClick={() => setVisible(false)} className='flex items-center gap-4 p-3 cursor-pointer'>
             <img className='h-4 rotate-180' src={assets.dropdown_icon} alt="" />

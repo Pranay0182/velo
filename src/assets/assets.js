@@ -198,7 +198,8 @@ export const products = [
         subCategory: "Displays",
         sizes: [],
         date: 1716622235448,
-        bestseller: false
+        bestseller: false,
+        newLaunch: true
     },
     {
         _id: "e_009",
@@ -210,7 +211,8 @@ export const products = [
         subCategory: "SBCs",
         sizes: [],
         date: 1716623345448,
-        bestseller: false
+        bestseller: false,
+        newLaunch: true
     },
     {
         _id: "e_010",
@@ -222,7 +224,8 @@ export const products = [
         subCategory: "Modules",
         sizes: [],
         date: 1716624445448,
-        bestseller: false
+        bestseller: false,
+        newLaunch: true
     },
     {
         _id: "e_011",
@@ -234,7 +237,8 @@ export const products = [
         subCategory: "Microcontrollers",
         sizes: [],
         date: 1716625545448,
-        bestseller: false
+        bestseller: false,
+        newLaunch: true
     },
     {
         _id: "e_012",
@@ -246,7 +250,8 @@ export const products = [
         subCategory: "Modules",
         sizes: [],
         date: 1716626645448,
-        bestseller: false
+        bestseller: false,
+        newLaunch: true
     }
 ]
 
