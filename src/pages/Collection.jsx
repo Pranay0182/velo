@@ -6,8 +6,9 @@ import ProductItem from '../components/ProductItem';
 
 const Collection = () => {
 
-  const { products, search, showSearch } = useContext(ShopContext);
+  const { products, search, showSearch, performSearch } = useContext(ShopContext);
   const [showFilter, setShowFilter] = useState(false);
+  const [showSort, setShowSort] = useState(false);
   const [filterProducts, setFilterProducts] = useState([]);
   const [category, setCategory] = useState([]);
   const [subCategory, setSubCategory] = useState([]);
@@ -39,7 +40,8 @@ const Collection = () => {
     let productsCopy = products.slice();
 
     if (showSearch && search) {
-      productsCopy = productsCopy.filter(item => item.name.toLowerCase().includes(search.toLowerCase()))
+      // Use Fuse.js fuzzy search
+      productsCopy = performSearch(search);
     }
 
     if (category.length > 0) {
@@ -146,20 +148,68 @@ const Collection = () => {
         <div className='flex justify-between text-base sm:text-2xl mb-4'>
           <Title text1={'ALL'} text2={'COLLECTIONS'} />
           {/* Porduct Sort */}
-          <select onChange={(e) => setSortType(e.target.value)} className='border-2 border-gray-300 text-sm px-2'>
-            <option value="relavent">Sort by: Relavent</option>
-            <option value="low-high">Sort by: Low to High</option>
-            <option value="high-low">Sort by: High to Low</option>
-          </select>
+          {/* Product Sort */}
+          <div className='relative'>
+            <button
+              onClick={() => setShowSort(!showSort)}
+              className='border border-gray-800 text-sm px-4 py-2 rounded-full bg-black text-gray-400 flex items-center gap-2 cursor-pointer hover:text-white transition-colors'
+            >
+              Sort by: {sortType === 'relavent' ? 'Relevant' : sortType === 'low-high' ? 'Low to High' : 'High to Low'}
+              <img src={assets.dropdown_icon} className={`h-3 transition-transform ${showSort ? 'rotate-180' : ''} invert`} alt="" />
+            </button>
+
+            {/* Custom Dropdown Menu */}
+            {showSort && (
+              <div className='absolute right-0 mt-2 w-48 bg-black border border-gray-800 rounded-lg shadow-xl z-50 overflow-hidden'>
+                <p
+                  onClick={() => { setSortType('relavent'); setShowSort(false); }}
+                  className='px-4 py-2 text-sm text-gray-400 hover:bg-gray-900 hover:text-white cursor-pointer'
+                >
+                  Relevant
+                </p>
+                <p
+                  onClick={() => { setSortType('low-high'); setShowSort(false); }}
+                  className='px-4 py-2 text-sm text-gray-400 hover:bg-gray-900 hover:text-white cursor-pointer'
+                >
+                  Low to High
+                </p>
+                <p
+                  onClick={() => { setSortType('high-low'); setShowSort(false); }}
+                  className='px-4 py-2 text-sm text-gray-400 hover:bg-gray-900 hover:text-white cursor-pointer'
+                >
+                  High to Low
+                </p>
+              </div>
+            )}
+          </div>
         </div>
 
         {/* Map Products */}
         <div className='grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 gap-y-6'>
-          {
+          {filterProducts.length > 0 ? (
             filterProducts.map((item, index) => (
               <ProductItem key={index} name={item.name} id={item._id} price={item.price} image={item.image} />
             ))
-          }
+          ) : (
+            <div className="col-span-full flex flex-col items-center justify-center mt-10">
+              <p className="text-xl font-medium text-gray-600 mb-4">
+                No results found for "{search}"
+              </p>
+              <p className="text-gray-500 mb-8">
+                Try checking your spelling or use different keywords.
+              </p>
+
+              <div className="w-full border-t pt-8">
+                <Title text1={'YOU'} text2={'MIGHT ALSO LIKE'} />
+                <div className='grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 gap-y-6 mt-6'>
+                  {/* Show random 4 products as recommendations */}
+                  {products.slice(0, 4).map((item, index) => (
+                    <ProductItem key={index} name={item.name} id={item._id} price={item.price} image={item.image} />
+                  ))}
+                </div>
+              </div>
+            </div>
+          )}
         </div>
       </div>
 

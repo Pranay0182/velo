@@ -1,4 +1,5 @@
 import { createContext, useEffect, useState } from "react";
+import Fuse from 'fuse.js';
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import axios from 'axios'
@@ -16,7 +17,7 @@ const ShopContextProvider = (props) => {
         if (isNaN(num)) return String(value);
         return formatterINR.format(num);
     }
-    const delivery_fee = 10;
+    const delivery_fee = 100;
     const backendUrl = import.meta.env.VITE_BACKEND_URL
     const [search, setSearch] = useState('');
     const [showSearch, setShowSearch] = useState(false);
@@ -132,10 +133,10 @@ const ShopContextProvider = (props) => {
         }
     }
 
-    const getUserCart = async ( token ) => {
+    const getUserCart = async (token) => {
         try {
-            
-            const response = await axios.post(backendUrl + '/api/cart/get',{},{headers:{token}})
+
+            const response = await axios.post(backendUrl + '/api/cart/get', {}, { headers: { token } })
             if (response.data.success) {
                 setCartItems(response.data.cartData)
             }
@@ -159,13 +160,27 @@ const ShopContextProvider = (props) => {
         }
     }, [token])
 
+    const performSearch = (query) => {
+        if (!query) return products;
+
+        const options = {
+            keys: ['name', 'category', 'subCategory', 'description'],
+            threshold: 0.4,
+            distance: 100,
+        };
+
+        const fuse = new Fuse(products, options);
+        const result = fuse.search(query);
+        return result.map(item => item.item);
+    };
+
     const value = {
         products, currency, delivery_fee, formatCurrency,
         search, setSearch, showSearch, setShowSearch,
-        cartItems, addToCart,setCartItems,
+        cartItems, addToCart, setCartItems,
         getCartCount, updateQuantity,
         getCartAmount, navigate, backendUrl,
-        setToken, token
+        setToken, token, performSearch
     }
 
     return (

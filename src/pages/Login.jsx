@@ -3,6 +3,7 @@ import { ShopContext } from '../context/ShopContext';
 import axios from 'axios';
 import { toast } from 'react-toastify';
 import { motion } from 'framer-motion';
+import { GoogleLogin } from '@react-oauth/google';
 
 const Login = () => {
 
@@ -95,6 +96,29 @@ const Login = () => {
         <button className='bg-black text-white font-medium px-8 py-3 rounded-lg hover:bg-gray-900 transition-transform active:scale-95 mt-2'>
           {currentState === 'Login' ? 'Sign In' : 'Sign Up'}
         </button>
+
+        <div className="flex items-center gap-4 mt-2">
+          <div className="h-[1px] w-full bg-gray-200"></div>
+          <p className="text-sm text-gray-500 whitespace-nowrap">OR</p>
+          <div className="h-[1px] w-full bg-gray-200"></div>
+        </div>
+
+        <div className="flex justify-center w-full">
+          <GoogleLogin
+            onSuccess={credentialResponse => {
+              console.log(credentialResponse);
+              toast.success("Google Sign-In Successful! (Token logged to console)");
+              // Here you would send credentialResponse.credential to your backend
+            }}
+            onError={() => {
+              console.log('Login Failed');
+              toast.error("Google Sign-In Failed");
+            }}
+            useOneTap
+          />
+        </div>
+
+
       </form>
     </motion.div>
   )

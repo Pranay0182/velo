@@ -4,6 +4,7 @@ import { Link, NavLink } from 'react-router-dom'
 import { AnimatePresence, motion } from 'framer-motion'
 import { ShopContext } from '../context/ShopContext';
 
+
 const categories = [
   { label: 'DIY Kits', to: '/collection/diy-kits' },
   { label: 'AI Hardware', to: '/collection/ai-hardware' },
@@ -116,7 +117,7 @@ const Navbar = () => {
 
       </ul>
 
-      {/* RIGHT ICONS – UNCHANGED */}
+      {/* RIGHT ICONS */}
       <div className='flex items-center gap-6'>
         <img
           onClick={() => setShowSearch(true)}
@@ -134,14 +135,16 @@ const Navbar = () => {
           />
           {/* Dropdown Menu */}
           {token &&
-            <div className='group-hover:block hidden absolute dropdown-menu right-0 pt-4'>
-              <div className='flex flex-col gap-2 w-36 py-3 px-5  bg-slate-100 text-gray-500 rounded'>
-                <p className='cursor-pointer hover:text-black'>My Profile</p>
+            <div className='group-hover:block hidden absolute dropdown-menu right-0 pt-4 z-50'>
+              <div className='flex flex-col gap-2 w-36 py-3 px-5 bg-slate-100 text-gray-500 rounded'>
+                <p onClick={() => navigate('/profile')} className='cursor-pointer hover:text-black'>My Profile</p>
                 <p onClick={() => navigate('/orders')} className='cursor-pointer hover:text-black'>Orders</p>
                 <p onClick={logout} className='cursor-pointer hover:text-black'>Logout</p>
               </div>
             </div>}
         </div>
+
+
 
         <Link to='/cart' className='relative'>
           <svg className='w-5 min-w-5 text-black' fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
@@ -183,7 +186,7 @@ const Navbar = () => {
             SHOP
           </NavLink>
 
-          {/* CHANGED: MOBILE CATEGORIES WITH DROPDOWN */}
+          {/* MOBILE CATEGORIES WITH DROPDOWN */}
           <div className="border">
             <button
               type="button"
@@ -216,7 +219,6 @@ const Navbar = () => {
               </div>
             )}
           </div>
-          {/* END MOBILE CATEGORIES CHANGE */}
 
           <NavLink onClick={() => setVisible(false)} className='py-2 pl-6 border' to='/about'>
             ABOUT

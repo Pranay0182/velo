@@ -18,6 +18,7 @@ import SearchBar from './components/SearchBar'
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import Verify from './pages/Verify'
+import Profile from './pages/Profile'
 
 const App = () => {
   const location = useLocation();
@@ -40,6 +41,7 @@ const App = () => {
             <Route path='/place-order' element={<PageTransition><PlaceOrder /></PageTransition>} />
             <Route path='/orders' element={<PageTransition><Orders /></PageTransition>} />
             <Route path='/verify' element={<PageTransition><Verify /></PageTransition>} />
+            <Route path='/profile' element={<PageTransition><Profile /></PageTransition>} />
           </Routes>
         </AnimatePresence>
       </div>
