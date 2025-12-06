@@ -14,16 +14,16 @@ const NewLaunch = () => {
     }, [products])
 
     return (
-        <section className='relative w-screen left-1/2 right-1/2 ml-[-50vw] mr-[-50vw] bg-white mt-8 mb-16'>
-            <div className='w-full px-3 sm:px-4 lg:px-6 py-8'>
-                <div className="flex items-center justify-between mb-4">
+        <section className='relative w-screen left-1/2 right-1/2 ml-[-50vw] mr-[-50vw] bg-white mb-10'>
+            <div className='w-full px-3 sm:px-4 lg:px-6 pt-2 pb-8'>
+                <div className="flex items-center justify-between mb-2">
                     <div className="h-[2px] bg-gray-800 flex-grow"></div>
-                    <h2 className="mx-6 text-2xl sm:text-3xl font-bold tracking-widest text-gray-900 uppercase">
+                    <h2 className="mx-2 text-2xl sm:text-3xl font-bold tracking-widest text-gray-900 uppercase">
                         NEW LAUNCH
                     </h2>
                     <div className="h-[2px] bg-gray-800 flex-grow"></div>
                 </div>
-                <p className='w-3/4 m-auto text-xs sm:text-sm md:text-base text-gray-600 max-w-2xl leading-relaxed text-center'>
+                <p className='w-full sm:w-3/4 m-auto text-xs sm:text-sm md:text-base text-gray-600 max-w-2xl leading-relaxed text-center'>
                     Check out our latest arrivals! Fresh components and boards to power your next big idea.
                 </p>
             </div>

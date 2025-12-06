@@ -13,20 +13,30 @@ const BestSeller = () => {
   }, [products])
 
   return (
-    <div className='my-10'>
-      <div className='text-center text-3xl py-8'>
-        <Title text1={'BEST'} text2={'SELLERS'} />
-        <p className='w-3/4 m-auto text-xs sm:text-sm md:text-base text-gray-600'>
-          Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the.
-        </p>
-      </div>
+    // Full-bleed breakout to allow full width
+    <div className='relative w-screen left-1/2 right-1/2 ml-[-50vw] mr-[-50vw] mb-10 bg-white'>
+      <div className="w-full px-3 sm:px-4 lg:px-6">
 
-      <div className='grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 gap-y-6'>
-        {
-          bestSeller.map((item, index) => (
-            <ProductItem key={index} id={item.id || item._id} name={item.name} image={item.image} price={item.price} />
-          ))
-        }
+        <div className='text-center pt-2 pb-8'>
+          <div className="flex items-center justify-between mb-2">
+            <div className="h-[2px] bg-gray-800 flex-grow"></div>
+            <h2 className="mx-2 text-2xl sm:text-3xl font-bold tracking-widest text-gray-900 uppercase whitespace-nowrap">
+              Best Sellers
+            </h2>
+            <div className="h-[2px] bg-gray-800 flex-grow"></div>
+          </div>
+          <p className='w-full sm:w-3/4 m-auto text-xs sm:text-sm md:text-base text-gray-600 max-w-2xl leading-relaxed'>
+            Discover our most popular products, loved by makers and engineers alike. From starter kits to advanced modules, these are the community favorites.
+          </p>
+        </div>
+
+        <div className='grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-6 gap-y-10 mb-10'>
+          {
+            bestSeller.map((item, index) => (
+              <ProductItem key={index} id={item.id || item._id} name={item.name} image={item.image} price={item.price} />
+            ))
+          }
+        </div>
       </div>
     </div>
   )
