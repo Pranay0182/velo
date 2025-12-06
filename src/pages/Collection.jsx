@@ -188,7 +188,7 @@ const Collection = () => {
         <div className='grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 gap-y-6'>
           {filterProducts.length > 0 ? (
             filterProducts.map((item, index) => (
-              <ProductItem key={index} name={item.name} id={item._id} price={item.price} image={item.image} />
+              <ProductItem key={index} name={item.name} id={item.id || item._id} price={item.price} image={item.image} />
             ))
           ) : (
             <div className="col-span-full flex flex-col items-center justify-center mt-10">

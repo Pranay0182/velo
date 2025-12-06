@@ -3,13 +3,13 @@ import Title from '../components/Title'
 import CartTotal from '../components/CartTotal'
 import { assets } from '../assets/assets'
 import { ShopContext } from '../context/ShopContext'
-import axios from 'axios'
 import { toast } from 'react-toastify'
+import { supabase } from '../config/supabaseClient'
 
 const PlaceOrder = () => {
 
     const [method, setMethod] = useState('cod');
-    const { navigate, backendUrl, token, cartItems, setCartItems, getCartAmount, delivery_fee, products } = useContext(ShopContext);
+    const { navigate, token, cartItems, setCartItems, getCartAmount, delivery_fee, products, user } = useContext(ShopContext);
     const [formData, setFormData] = useState({
         firstName: '',
         lastName: '',
@@ -28,34 +28,6 @@ const PlaceOrder = () => {
         setFormData(data => ({ ...data, [name]: value }))
     }
 
-    const initPay = (order) => {
-        const options = {
-            key: import.meta.env.VITE_RAZORPAY_KEY_ID,
-            amount: order.amount,
-            currency: order.currency,
-            name:'Order Payment',
-            description:'Order Payment',
-            order_id: order.id,
-            receipt: order.receipt,
-            handler: async (response) => {
-                console.log(response)
-                try {
-                    
-                    const { data } = await axios.post(backendUrl + '/api/order/verifyRazorpay',response,{headers:{token}})
-                    if (data.success) {
-                        navigate('/orders')
-                        setCartItems({})
-                    }
-                } catch (error) {
-                    console.log(error)
-                    toast.error(error)
-                }
-            }
-        }
-        const rzp = new window.Razorpay(options)
-        rzp.open()
-    }
-
     const onSubmitHandler = async (event) => {
         event.preventDefault()
         try {
@@ -65,7 +37,7 @@ const PlaceOrder = () => {
             for (const items in cartItems) {
                 for (const item in cartItems[items]) {
                     if (cartItems[items][item] > 0) {
-                        const itemInfo = structuredClone(products.find(product => product._id === items))
+                        const itemInfo = structuredClone(products.find(product => (product.id || product._id) === items))
                         if (itemInfo) {
                             itemInfo.size = item
                             itemInfo.quantity = cartItems[items][item]
@@ -75,49 +47,70 @@ const PlaceOrder = () => {
                 }
             }
 
+            if (orderItems.length === 0) {
+                toast.error("Cart is empty");
+                return;
+            }
+
             let orderData = {
+                user_id: user ? user.id : null,
                 address: formData,
-                items: orderItems,
-                amount: getCartAmount() + delivery_fee
-            }
-            
-
-            switch (method) {
-
-                // API Calls for COD
-                case 'cod':
-                    const response = await axios.post(backendUrl + '/api/order/place',orderData,{headers:{token}})
-                    if (response.data.success) {
-                        setCartItems({})
-                        navigate('/orders')
-                    } else {
-                        toast.error(response.data.message)
-                    }
-                    break;
-
-                case 'stripe':
-                    const responseStripe = await axios.post(backendUrl + '/api/order/stripe',orderData,{headers:{token}})
-                    if (responseStripe.data.success) {
-                        const {session_url} = responseStripe.data
-                        window.location.replace(session_url)
-                    } else {
-                        toast.error(responseStripe.data.message)
-                    }
-                    break;
-
-                case 'razorpay':
-
-                    const responseRazorpay = await axios.post(backendUrl + '/api/order/razorpay', orderData, {headers:{token}})
-                    if (responseRazorpay.data.success) {
-                        initPay(responseRazorpay.data.order)
-                    }
-
-                    break;
-
-                default:
-                    break;
+                amount: getCartAmount() + delivery_fee,
+                paymentMethod: method,
+                payment: false,
+                date: Date.now()
             }
 
+            // Supabase Order Placement Logic
+            if (method === 'cod') {
+
+                if (!user) {
+                    toast.error("Please login to place an order");
+                    return;
+                }
+
+                // 1. Insert Order
+                const { data: orderResult, error: orderError } = await supabase
+                    .from('orders')
+                    .insert([orderData])
+                    .select();
+
+                if (orderError) throw orderError;
+
+                const orderId = orderResult[0].id;
+
+                // 2. Insert Order Items
+                const orderItemsData = orderItems.map(item => ({
+                    order_id: orderId,
+                    product_id: item.id || item._id,
+                    name: item.name,
+                    quantity: item.quantity,
+                    price: item.price,
+                    size: item.size
+                }));
+
+                const { error: itemsError } = await supabase
+                    .from('order_items')
+                    .insert(orderItemsData);
+
+                if (itemsError) throw itemsError;
+
+                // 3. Clear Cart (DB)
+                const { error: clearCartError } = await supabase
+                    .from('cart_items')
+                    .delete()
+                    .eq('user_id', user.id);
+
+                if (clearCartError) console.error("Error clearing cart: ", clearCartError);
+
+                // 4. Success
+                setCartItems({});
+                navigate('/orders');
+                toast.success("Order Placed Successfully!");
+
+            } else {
+                toast.info("Only COD is currently supported for this demo.");
+            }
 
         } catch (error) {
             console.log(error)

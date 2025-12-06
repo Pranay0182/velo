@@ -15,7 +15,7 @@ export default function ShopGrid() {
       className="
         relative w-screen left-1/2 right-1/2
         ml-[-50vw] mr-[-50vw]
-        py-12 bg-white
+        pt-12 pb-2 bg-white
       "
     >
       {/* inner padding: very small gap from window edges */}

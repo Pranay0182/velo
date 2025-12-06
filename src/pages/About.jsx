@@ -109,7 +109,7 @@ export default function AboutVelotech() {
         </section>
 
         {/* Footer CTA & Newsletter - full width */}
-        
+
 
       </div>
     </div>
